@@ -21,7 +21,7 @@ export const HomeScreen = () => {
         if (user) {
           setLoggedInUserId(user.uid);
         } else {
-          setLoggedInUserId("");
+          setLoggedInUserId("hello!");
         }
       });
     };
