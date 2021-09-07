@@ -1,10 +1,20 @@
-import { Typography, AppBar } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { Typography, AppBar, Box, Popover, Button } from "@material-ui/core";
+import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
 import { Toolbar } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import Grid from "@material-ui/core/Grid";
 import logo from "../logos/favicon.png";
+import PopupState, { bindPopover } from "material-ui-popup-state";
+import {
+  usePopupState,
+  bindTrigger,
+  bindMenu,
+} from "material-ui-popup-state/hooks";
+import React from "react";
+import { auth } from "../firebaseSetup";
+import { createTheme } from "@material-ui/core/styles";
+
 // import LocalBarIcon from "@material-ui/icons/LocalBar";
 // import SchoolRoundedIcon from "@material-ui/icons/SchoolRounded";
 // import BackpackRoundedIcon from "@material-ui/icons/BackpackRounded";
@@ -116,6 +126,24 @@ const useStyles = makeStyles((theme) => ({
 
 export const ToolbarAndChips = () => {
   const classes = useStyles();
+  //this will be called later.
+
+  function signOut() {
+    auth
+      .signOut()
+      .then(() => {
+        console.log("Logging ya out bitch");
+        refreshPage();
+      })
+      .catch((error) => {
+        console.log("error logging in", error);
+      });
+  }
+
+  function refreshPage() {
+    window.location.reload();
+  }
+
   // const [flag1, setFlag1] = React.useState(true);
   // const [flag2, setFlag2] = React.useState(true);
   // const [flag3, setFlag3] = React.useState(true);
@@ -128,21 +156,104 @@ export const ToolbarAndChips = () => {
   // const handleClickParty = () => {
   //   setFlag3(!flag3);
   // };
+
+  function getRandomInt(min: number | any, max: number | any) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: "#EE6C4D",
+        light: "#ff9b79",
+        dark: "#b53a22",
+      },
+      secondary: {
+        main: "#4C5760",
+        light: "#78848d",
+        dark: "#242e36",
+      },
+    },
+  });
+
+  const alphabet = [
+    "🔛 🎋 🎱",
+    "📴 😏 😚",
+    "⏲ 🏓 🚝",
+    "🙏 🐐 ⚽️",
+    "🛍 ◾️ 🐡",
+    "🍷 🌼 🎓",
+    "🐊 🗝 📥",
+    "🔇 👺 📼 ",
+    "☺️ 🔂 🏌",
+    "🍻 🍊 🐩",
+    "😐 🐝 💟",
+    "😣 🕰 ⛩ ",
+    "📽 🛁 ⏰ ",
+    "🏙 🔦 🦁 ",
+    "☠ 🚧 📝",
+    "🖊 ☢ 👄",
+    "🏒 🎢 🌘  ",
+    "🕸 🐌 🗞 ",
+    "🍃 🍄 🔊",
+    "🌈 🐒 📹 ",
+    "🌿 🎁 😤  ",
+    "☝️ 🏓 🐗 ",
+    "📽 ⏰ 🙃",
+  ];
+
   return (
     <AppBar position="sticky" elevation={0}>
       <Toolbar className={classes.toolbar}>
         <Grid container spacing={1} justifyContent="center" alignItems="center">
           <img className={classes.appicon} src={logo} alt="Logo" />
           <Typography variant="h5" className={classes.title}>
-            What's Poppin @K
+            {alphabet[getRandomInt(0, alphabet.length - 1)]}
           </Typography>
-          <IconButton
-            aria-label="account of current user"
-            aria-controls="menu-appbar"
-            aria-haspopup="true"
-          >
-            <AccountCircle className={classes.accountIcon} />
-          </IconButton>
+
+          <PopupState variant="popover" popupId="demo-popup-popover">
+            {(popupState) => (
+              <div>
+                <IconButton
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  {...bindTrigger(popupState)}
+                >
+                  <AccountCircle
+                    className={classes.accountIcon}
+                  ></AccountCircle>
+                </IconButton>
+                <Popover
+                  {...bindPopover(popupState)}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "center",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "center",
+                  }}
+                >
+                  <Box p={2}>
+                    <Typography>
+                      <ThemeProvider theme={theme}>
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          onClick={signOut}
+                        >
+                          Logout
+                        </Button>
+                      </ThemeProvider>
+                    </Typography>
+                  </Box>
+                </Popover>
+              </div>
+            )}
+          </PopupState>
         </Grid>
       </Toolbar>
 
