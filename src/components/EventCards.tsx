@@ -114,7 +114,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     color: "#000000",
     textAlign: "left",
-    backgroundColor: "#EE6C4D",
+    backgroundColor: "#FF8C19",
   },
 }));
 

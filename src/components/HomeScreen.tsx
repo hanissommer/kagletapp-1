@@ -12,6 +12,7 @@ import firebase from "firebase";
 import { useEffect, useState } from "react";
 import Button from "@material-ui/core/Button";
 import { useHistory } from "react-router-dom";
+import backdrop from "../logos/kagletplantsbackdrop.jpg";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,12 +26,22 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 20,
     padding: "0.25rem 2rem",
   },
+  backdrop: {
+    height: 500,
+    width: 500,
+    alignContent: "center",
+    justify: "center",
+    opacity: 0.3,
+    position: "absolute",
+    zIndex: -1,
+    marginTop: 100
+  },
 }));
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#EE6C4D",
+      main: "#FF8C19",
       light: "#ff9b79",
       dark: "#b53a22",
     },
@@ -52,7 +63,7 @@ export const HomeScreen = () => {
           setLoggedInUserId(user.uid);
           console.log(user.uid);
         } else {
-          setLoggedInUserId("");
+          setLoggedInUserId("erin.murphy19@kzoo.edu");
         }
       });
     };
@@ -125,7 +136,8 @@ export const HomeScreen = () => {
               alignItems="center"
               justify="center"
             >
-              <EventCardContainer />
+              <img alt="Backdrop" className={classes.backdrop} src={backdrop}/>
+              <EventCardContainer/>
             </Grid>
             <Grid item>
               <PostButton />
